@@ -1,4 +1,5 @@
 use std::env;
+use std::process;
 
 enum Mode {
     Primary,
@@ -12,26 +13,31 @@ fn run(mode: Mode) {
     }
 }
 
+fn usage() {
+    eprintln!("Usage: rkv [-p | --primary | -r | --replica]");
+    eprintln!("Defaults to --primary if no argument is given.");
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() > 2 {
-        eprintln!("Please only use between --primary , --replica, -p or -r");
-        return;
-    }
+    let mode = match args.as_slice() {
+        [_] => Mode::Primary,
+        [_, flag] => match flag.as_str() {
+            "-p" | "--primary" => Mode::Primary,
+            "-r" | "--replica" => Mode::Replica,
+            other => {
+                eprintln!("Error: unrecognized argument '{}'", other);
+                usage();
+                process::exit(1);
+            }
+        },
+        _ => {
+            eprintln!("Error: expected at most 1 argument, got {}", args.len() - 1);
+            usage();
+            process::exit(1);
+        }
+    };
 
-    if args.len() == 1 {
-        run(Mode::Primary);
-        return;
-    }
-
-    let flag = &args[1];
-
-    match flag.as_str() {
-        "-p" => run(Mode::Primary),
-        "-r" => run(Mode::Replica),
-        "--primary" => run(Mode::Primary),
-        "--replica" => run(Mode::Replica),
-        _ => eprintln!("Please only use between --primary , --replica, -p or -r"),
-    }
+    run(mode);
 }
