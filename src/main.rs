@@ -1,15 +1,35 @@
-use std::env;
-use std::process;
+use std::{
+    env,
+    io::Read,
+    net::{TcpListener, TcpStream},
+    process,
+};
 
 enum Mode {
     Primary,
     Replica,
 }
 
+const PRIMARY_PORT: &str = "127.0.0.1:7000";
+const REPLICA_PORT: &str = "127.0.0.1:7001";
+
+fn handle_incoming_stream(stream: &mut TcpStream) {
+    let mut buffer = String::new();
+    stream.read_to_string(&mut buffer).unwrap();
+
+    println!("{buffer}");
+}
+
 fn run(mode: Mode) {
-    match mode {
-        Mode::Primary => println!("running as a primary node"),
-        Mode::Replica => println!("running as a replica node"),
+    let port = match mode {
+        Mode::Primary => PRIMARY_PORT,
+        Mode::Replica => REPLICA_PORT,
+    };
+
+    let listener = TcpListener::bind(port).unwrap();
+
+    for stream in listener.incoming() {
+        handle_incoming_stream(&mut stream.unwrap());
     }
 }
 
