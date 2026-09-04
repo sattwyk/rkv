@@ -11,4 +11,5 @@
 
 - this serves as the primary application we be test on a new dst harness in the making
 
-> [!NOTE] no LLMS or agentic coding is being used to write the code everything is handwritten apart from research
+> [!NOTE]
+> no LLMS or agentic coding is being used to write the code everything is handwritten apart from research
