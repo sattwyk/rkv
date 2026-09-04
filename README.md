@@ -9,7 +9,7 @@
 
 - the initial fault model is crash fault and later expanding to other fault model e.g byzantine fault
 
-- this serves as the primary application we be test on a new dst harness in the making
+- this serves as the primary application will be test on a new dst harness in the making
 
 > [!NOTE]
 > no LLMS or agentic coding is being used to write the code everything is handwritten apart from research
